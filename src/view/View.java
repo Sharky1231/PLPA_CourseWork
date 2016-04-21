@@ -1,9 +1,16 @@
 package view;
 
+import controller.Controller;
+import gnu.expr.KawaConvert;
+import gnu.expr.KawaScriptBindings;
+import gnu.expr.KawaScriptEngine;
+import kawa.standard.Scheme;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 import javax.swing.JFrame;
 
 public class View extends JFrame{
@@ -21,10 +28,10 @@ public class View extends JFrame{
     private javax.swing.JButton submitButton;
     private javax.swing.JTextField textField;
 
+
     public View() {
         init();
         addExtraSettings();
-        registerEvents();
     }
 
     private void addExtraSettings() {
@@ -144,20 +151,32 @@ public class View extends JFrame{
         pack();
     }// </editor-fold>
 
+    public void update(String command) {
+        codeTextArea.append(command + "\n");
+        textField.setText("");
+
+        //canvasArea.drawTest();
+    }
+
     private class ButtonHandler implements ActionListener {
+        public Controller controller;
+        public ButtonHandler(Controller controller) {
+            this.controller = controller;
+        }
+
         public void actionPerformed(ActionEvent event) {
             if (event.getSource() == submitButton) {
-                if (!textField.getText().isEmpty()) {
-                    codeTextArea.append(textField.getText() + "\n");
-                    textField.setText("");
-                    canvasArea.drawTest();
-                }
+                controller.executeAction(event);
             }
         }
     }
 
-    private void registerEvents() {
-        ActionListener listener = new ButtonHandler();
+    public String getCommandFromText(){
+        return textField.getText();
+    }
+
+    public void registerEvents(Controller controller) {
+        ActionListener listener = new ButtonHandler(controller);
         submitButton.addActionListener(listener);
     }
 

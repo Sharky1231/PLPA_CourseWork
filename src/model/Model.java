@@ -1,6 +1,23 @@
 package model;
 
-public class Model {
-}
+import kawa.standard.Scheme;
 
-//Troels
+public class Model {
+
+    private Scheme scheme;
+
+    public Model()
+    {
+        this.scheme = new Scheme();
+    }
+
+    public Object eval(String command)
+    {
+        try {
+            return scheme.eval(command);
+        } catch (Throwable throwable) {
+            return null;
+        }
+    }
+
+}
