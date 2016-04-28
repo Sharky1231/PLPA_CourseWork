@@ -28,6 +28,10 @@ public class View extends JFrame{
     private javax.swing.JButton submitButton;
     private javax.swing.JTextField textField;
 
+    // Canvas dimensions
+    private static final int CANVAS_WIDTH = 700;
+    private static final int CANVAS_HEIGHT = 450;
+
 
     public View() {
         init();
@@ -105,7 +109,7 @@ public class View extends JFrame{
 
         jLabel1.setText("Errors");
 
-        jLabel3.setText("Canvas");
+        jLabel3.setText("Canvas - (Ratio 1:36) ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -116,7 +120,7 @@ public class View extends JFrame{
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                 .addComponent(jScrollPane3)
-                                                .addComponent(canvasArea, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE))
+                                                .addComponent(canvasArea, javax.swing.GroupLayout.DEFAULT_SIZE, CANVAS_WIDTH, Short.MAX_VALUE))
                                         .addComponent(jLabel1)
                                         .addComponent(jLabel3))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -129,7 +133,7 @@ public class View extends JFrame{
                                 .addContainerGap()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(canvasArea, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(canvasArea, javax.swing.GroupLayout.PREFERRED_SIZE, CANVAS_HEIGHT, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -151,11 +155,20 @@ public class View extends JFrame{
         pack();
     }// </editor-fold>
 
-    public void update(String command) {
+    public void updateCommand(String command) {
         codeTextArea.append(command + "\n");
         textField.setText("");
 
-        //canvasArea.drawTest();
+//        canvasArea.drawTest();
+    }
+
+    public synchronized void drawCartesianPlane() {
+        try {
+            wait(50);
+            canvasArea.drawCartesianPlane();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private class ButtonHandler implements ActionListener {

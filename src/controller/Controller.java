@@ -19,6 +19,7 @@ public class Controller {
     public void start() {
         view.registerEvents(this);
         view.showView();
+        view.drawCartesianPlane();
     }
 
     public void executeAction(ActionEvent e)
@@ -30,7 +31,7 @@ public class Controller {
                 Object result = model.eval(command);
 
                 view.setError(result.toString());
-                view.update(command);
+                view.updateCommand(command);
             }
             catch (NullPointerException e1)
             {
