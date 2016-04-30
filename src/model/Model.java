@@ -1,20 +1,24 @@
 package model;
 
-import kawa.standard.Scheme;
+import jscheme.JScheme;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 public class Model {
 
-    private Scheme scheme;
+    private JScheme jScheme;
 
-    public Model()
-    {
-        this.scheme = new Scheme();
+    public Model() {
+        this.jScheme = new JScheme();
     }
 
-    public Object eval(String command)
-    {
+    public void loadDefinitionsFromFilePath(String path) throws FileNotFoundException {
+        this.jScheme.load(new FileReader(path));
+    }
+
+    public Object eval(String command) {
         try {
-            return scheme.eval(command);
+            return jScheme.eval(command);
         } catch (Throwable throwable) {
             return null;
         }

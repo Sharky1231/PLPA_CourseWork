@@ -26,17 +26,8 @@ public class CustomCanvas extends Canvas {
     // distance of coordinate strings from axis
     public static final int AXIS_STRING_DISTANCE = 20;
 
-    public void drawTest() {
-//       getGraphics().drawLine(r.nextInt(700), r.nextInt(272), r.nextInt(700), r.nextInt(272));
-
-        // Drawing point is done by drawing line with all 4 parameters same
-
-//        Random r = new Random();
-//
-//        for (int i = 0; i < 500; i++) {
-//            int ra = r.nextInt(700);
-//            getGraphics().drawLine(ra, ra, ra, ra);
-//        }
+    public void drawPixel(int x, int y) {
+        getGraphics().drawLine(x, y, x, y);
     }
 
     public void drawCartesianPlane() {

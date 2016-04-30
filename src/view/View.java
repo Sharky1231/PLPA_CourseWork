@@ -1,16 +1,10 @@
 package view;
 
 import controller.Controller;
-import gnu.expr.KawaConvert;
-import gnu.expr.KawaScriptBindings;
-import gnu.expr.KawaScriptEngine;
-import kawa.standard.Scheme;
+import jsint.Pair;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
-import java.util.concurrent.ExecutionException;
 import javax.swing.JFrame;
 
 public class View extends JFrame{
@@ -158,17 +152,20 @@ public class View extends JFrame{
     public void updateCommand(String command) {
         codeTextArea.append(command + "\n");
         textField.setText("");
-
-//        canvasArea.drawTest();
     }
 
     public synchronized void drawCartesianPlane() {
         try {
-            wait(50);
+            // Wait for components to be loaded and then draw cartesian plane
+            wait(100);
             canvasArea.drawCartesianPlane();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void drawPoint(Pair pair) {
+        canvasArea.drawPixel((int)pair.getFirst(), (int)pair.getRest());
     }
 
     private class ButtonHandler implements ActionListener {
