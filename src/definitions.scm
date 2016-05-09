@@ -89,3 +89,44 @@
 (define TEXT-AT
     (lambda (x y text)
         (cons (cons x y) text)))
+
+; == CIRCLE method ==
+;; Calculates 8 coordinates for the circle slope (one of 8 octants)
+;; Takes starting point x0 y0, the radius/x, y which is initially 0
+(define xy_values
+  (lambda (x0 y0 x y decision_over_2)
+    (if(>= x y)
+       (if(<= decision_over_2 0)
+          (cons (cons x y) (xy_values x0 y0 x (+ y 1) (+ (* y 2) 1)))
+          (cons (cons x y) (xy_values x0 y0 (- x 1) (+ y 1) (+ (* (- y (- x 1)) 2) 1))))
+       '())))
+
+;; Calculates all coordinates for an octant by matching x_0 and y_0 with an operator and the calculated circle slope coordinates
+;; Takes a operator (+ or -) and list operator (car or cdr), choosing which of the axis values should be applied for x_0 and y_0
+(define octant_offset
+  (lambda (operator_x list_operator_x operator_y list_operator_y x_0 y_0 pair list)
+    (if(null? pair)
+         list
+         (cons (cons (single_axis_coordinate operator_x list_operator_x (car pair) x_0) (single_axis_coordinate operator_y list_operator_y (car pair) y_0)) (octant_offset operator_x list_operator_x operator_y list_operator_y x_0 y_0 (cdr pair) list)))))
+
+;; Calculates a single axis coordinate
+;; Takes a operator (+ or -) , list operator (car or cdr)
+(define single_axis_coordinate
+  (lambda (operator list_operator pair single_axis_0)
+    (+ (operator (list_operator pair)) single_axis_0)))
+
+;; Calculates all octants
+(define calc_octans
+  (lambda (x_0 y_0 radius xy_values)
+    (octant_offset  + car + cdr x_0 y_0 xy_values
+                    (octant_offset  + cdr + car x_0 y_0 xy_values
+                                    (octant_offset  - car + cdr x_0 y_0 xy_values
+                                                    (octant_offset  - cdr + car x_0 y_0 xy_values
+                                                                    (octant_offset  - car - cdr x_0 y_0 xy_values
+                                                                                    (octant_offset  - cdr - car x_0 y_0 xy_values
+                                                                                                    (octant_offset  + car - cdr x_0 y_0 xy_values
+                                                                                                                    (octant_offset  + cdr - car x_0 y_0 xy_values (list)))))))))))
+
+(define CIRCLE
+  (lambda (center_coordinate radius)
+    (calc_octans (car center_coordinate) (cdr center_coordinate) radius (xy_values (car center_coordinate) (cdr center_coordinate) radius 0 (- radius 1)))))
