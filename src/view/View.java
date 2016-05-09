@@ -38,7 +38,7 @@ public class View extends JFrame{
         errorTextArea.setEditable(false);
 
         setSize(1000, 700);
-        setResizable(true);
+        setResizable(false);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getRootPane().setDefaultButton(submitButton);
         setLocationRelativeTo(null);
@@ -103,7 +103,7 @@ public class View extends JFrame{
 
         jLabel1.setText("Errors");
 
-        jLabel3.setText("Canvas - (Ratio 1:36) ");
+        jLabel3.setText("Canvas - (Ratio 1:32) ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -149,7 +149,7 @@ public class View extends JFrame{
         pack();
     }// </editor-fold>
 
-    public void updateCommand(String command) {
+    public void addCommandToTextArea(String command) {
         codeTextArea.append(command + "\n");
         textField.setText("");
     }
@@ -157,7 +157,7 @@ public class View extends JFrame{
     public synchronized void drawCartesianPlane() {
         try {
             // Wait for components to be loaded and then draw cartesian plane
-            wait(100);
+            wait(200);
             canvasArea.drawCartesianPlane();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -166,6 +166,18 @@ public class View extends JFrame{
 
     public void drawPoint(Pair pair) {
         canvasArea.drawPixel((int)pair.getFirst(), (int)pair.getRest());
+    }
+
+    public void prepareCanvas() {
+        canvasArea.prepare();
+    }
+
+    public void setOriginBottomLeft() {
+        canvasArea.changeOrigin();
+    }
+
+    public void drawText(int xCord, int yCord, String text) {
+        canvasArea.drawText(xCord, yCord, text);
     }
 
     private class ButtonHandler implements ActionListener {
