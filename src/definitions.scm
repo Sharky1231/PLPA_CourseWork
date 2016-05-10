@@ -160,7 +160,7 @@
                     )
                 (if (< (/ (- end_y start_y) (- end_x start_x)) -1) ; Is the slope below -1
                     (CorectOutput (- 0 start_y) start_x (- 0 end_y) end_x 6) ;OCT = 6 (-y, x)
-                    (CorectOutput start_x (- 0 start_y) end_x (- 0 end_y 7)) ;OCT = 7 (x, -y)
+                    (CorectOutput start_x (- 0 start_y) end_x (- 0 end_y )7) ;OCT = 7 (x, -y)
                     )) ;end going left
             );end going up
     (HorizontalVerticalLine start_x start_y end_x end_y) ;Make a horizontal or vartical line instead
