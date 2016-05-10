@@ -90,6 +90,86 @@
     (lambda (x y text)
         (cons (cons x y) text)))
 
+
+
+; == LINE2 method ==
+
+; FUnction for recursivliy calculating all the points
+(define calPoints
+  (lambda (x xEnd y yEnd dx dy D)
+    (if (= x xEnd) ;Is the end condition reached?
+        (cons (cons xEnd yEnd) '()) ;Return end point at end condition
+        (if (>= D 0)
+            ( cons (cons x y) (calPoints (+ x 1) xEnd (+ y 1) yEnd dx dy (- (+ D dy) dx) )) ;Recursive step
+            ( cons (cons x y) (calPoints (+ x 1) xEnd y yEnd dx dy (+ D dy) ))              ;Recursive step
+                  ))))
+
+; Function than switch a pair of coordinates from octant 0 to (0-7). From (x,y) to -> see "return comments"
+(define switchOctant
+  (lambda (octant xyPair)
+
+    (cond ((= octant 0) xyPair)                                        ;return (x, y)
+          ((= octant 1) (cons (cdr xyPair) (car xyPair)) )             ;return (y, x)
+          ((= octant 2) (cons (- 0 (cdr xyPair)) (car xyPair)) )       ;return (-y, x)
+          ((= octant 3) (cons (- 0 (car xyPair)) (cdr xyPair)) )       ;return (-x, y)
+          ((= octant 4) (cons (- 0 (car xyPair)) (- 0 (cdr xyPair))) ) ;return (-x, -y)
+          ((= octant 5) (cons (- 0 (cdr xyPair)) (- 0 (car xyPair))) ) ;return (-y, -x)
+          ((= octant 6) (cons (cdr xyPair) (- 0 (car xyPair))))        ;return (y, -x)
+          ((= octant 7) (cons (car xyPair) (- 0 (cdr xyPair))))        ;return (x, -y)
+)))
+
+; Function that invokes the calculation of the points and corrects the output acording too the octant. It dos so by applying "SwitchOctant " to each element in the returned list
+(define CorectOutput
+  (lambda (start_x start_y end_x end_y octant)
+    (map (lambda (xy) (switchOctant octant xy)) (calPoints start_x end_x start_y end_y (- end_x start_x) (- end_y start_y ) (- (- end_y start_y ) (- end_x start_x) )) )
+    )
+)
+
+;Function for handling a horizontal and vertical lines
+(define HorizontalVerticalLine
+  (lambda (start_x start_y end_x end_y)
+    (if (= start_x end_x)
+        180 ;Make a horizontal line   <-- NOT DONE
+        90  ;Make a vertical line     <-- NOT DONE
+        )
+    )
+ )
+
+
+(define LINE2
+  (lambda (start_x start_y end_x end_y)
+
+
+    ;Check the line is not horizontal or vertical
+    (if (and (not (= start_x end_x)) (not(= start_y end_y)))
+        ;Desition tree for determining wich octant the line is in.
+        (if (> (- end_y start_y) 0) ;It is goint up?
+            (if (> (- end_x start_x) 0) ; Is it going right?
+                (if (< (/ (- end_y start_y) (- end_x start_x)) 1) ; Is the slope below 1
+                    (CorectOutput start_x start_y end_x end_y 0) ;OCT = 0 (x, y)
+                    (CorectOutput start_y start_x end_y end_x 1) ;OCT = 1 (y, x)
+                    )
+                (if (< (/ (- end_y start_y) (- end_x start_x)) -1) ; Is the slope below -1
+                    (CorectOutput start_y (- 0 start_x) end_y (- 0 end_x) 2) ;OCT = 2 (y, -x)   <-- Here it is going up (positive y) and going left (negative x) and with a slope below -1 it is in oct 2.
+                    (CorectOutput (- 0 start_x) start_y (- 0 end_x) end_y 3) ;OCT = 3 (-x, y)
+                    )) ;end going right
+            (if (< (- end_x start_x) 0) ; Is it going left?
+                (if (< (/ (- end_y start_y) (- end_x start_x)) 1) ; Is the slope below 1
+                    (CorectOutput (- 0 start_x) (- 0 start_y) (- 0 end_x) (- 0 end_y) 4) ;OCT = 4 (-x, -y)
+                    (CorectOutput (- 0 start_y) (- 0 start_x) (- 0 end_y) (- 0 end_x) 5) ;OCT = 5 (-y, -x)
+                    )
+                (if (< (/ (- end_y start_y) (- end_x start_x)) -1) ; Is the slope below -1
+                    (CorectOutput (- 0 start_y) start_x (- 0 end_y) end_x 6) ;OCT = 6 (-y, x)
+                    (CorectOutput start_x (- 0 start_y) end_x (- 0 end_y 7)) ;OCT = 7 (x, -y)
+                    )) ;end going left
+            );end going up
+    (HorizontalVerticalLine start_x start_y end_x end_y) ;Make a horizontal or vartical line instead
+    )
+ ))
+
+
+
+
 ; == CIRCLE method ==
 ;; Calculates 8 coordinates for the circle slope (one of 8 octants)
 ;; Takes starting point x0 y0, the radius/x, y which is initially 0
