@@ -44,8 +44,8 @@
 ;            (x_axis_values (+ start_x left_offset)
 ;                    (+ (* end_x real_ratio) left_offset)) '()))) ; why we are passing empty list?
 
-; == LINE method ==
-(define LINE
+; == OLDLINE method ==
+(define OLDLINE
     (lambda (start_x start_y end_x end_y)
         (y_axis_values
             (+ start_x left_offset)
@@ -92,7 +92,7 @@
 
 
 
-; == LINE2 method ==
+; == LINE method ==
 
 ; FUnction for recursivliy calculating all the points
 (define calPoints
@@ -158,14 +158,16 @@
 )
 
 
-(define LINE2
+
+
+(define DetermineOctant
   (lambda (start_x start_y end_x end_y)
 
 
     ;Check the line is not horizontal or vertical
     (if (and (not (= start_x end_x)) (not(= start_y end_y)))
-        ;Desition tree for determining wich octant the line is in.
-        (if (> (- end_y start_y) 0) ;It is goint up?
+        ;Desition tree for determining witch octant the line is in.
+        (if (> (- end_y start_y) 0) ;It is going up?
             (if (> (- end_x start_x) 0) ; Is it going right?
                 (if (< (/ (- end_y start_y) (- end_x start_x)) 1) ; Is the slope below 1
                     (CorectOutput start_x start_y end_x end_y 0) ;OCT = 0 (x, y)
@@ -187,8 +189,18 @@
             );end going up
     (HorizontalVerticalLine start_x start_y end_x end_y) ;Make a horizontal or vartical line instead
     )
- ))
+ )
+)
 
+
+
+(define (LINE start_x start_y end_x end_y)
+    (DetermineOctant (+ start_x left_offset)
+                     (+ start_y bottom_offset)
+                     (+ end_x left_offset)
+                     (+ end_y bottom_offset)
+    )
+)
 
 
 
