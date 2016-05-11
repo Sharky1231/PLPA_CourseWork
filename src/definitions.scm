@@ -126,14 +126,36 @@
 )
 
 ;Function for handling a horizontal and vertical lines
-(define HorizontalVerticalLine
-  (lambda (start_x start_y end_x end_y)
-    (if (= start_x end_x)
-        180 ;Make a horizontal line   <-- NOT DONE
-        90  ;Make a vertical line     <-- NOT DONE
-        )
-    )
- )
+(define (HorizontalVerticalLine start_x start_y end_x end_y)
+   (if (= start_x end_x)
+       (if (< start_y end_y)
+           (MakeVerticalLine start_y end_y start_x)
+           (MakeVerticalLine end_y start_y start_x)
+       )
+       (if (< start_x end_x)
+           (MakeHorizontalLine start_x end_x start_y)
+           (MakeHorizontalLine end_x start_x start_y)
+       )
+  )
+)
+
+(define (MakeHorizontalLine small_x large_x const_y)
+  (if (<= small_x large_x)
+      (if (= small_x large_x) ;Check end condition
+          (cons (cons large_x const_y) '()) ;Return end point
+          (cons (cons small_x const_y) (MakeHorizontalLine (+ small_x 1) large_x const_y )) ;Recursive call
+      )
+  )
+)
+
+(define (MakeVerticalLine small_y large_y const_x)
+  (if (<= small_y large_y)
+      (if (= small_y large_y) ;Check end condition
+          (cons (cons const_x large_y ) '()) ;Return end point
+          (cons (cons const_x small_y ) (MakeVerticalLine (+ small_y 1) large_y const_x )) ;Recursive call
+      )
+  )
+)
 
 
 (define LINE2
