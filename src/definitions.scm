@@ -241,6 +241,12 @@
                                                                                                     (octant_offset  + car - cdr x_0 y_0 xy_values
                                                                                                                     (octant_offset  + cdr - car x_0 y_0 xy_values (list)))))))))))
 
-(define CIRCLE
+(define CircleInputs
   (lambda (center_coordinate radius)
     (calc_octans (car center_coordinate) (cdr center_coordinate) radius (xy_values (car center_coordinate) (cdr center_coordinate) radius 0 (- radius 1)))))
+
+; Corecting the circle center with the ofsets
+(define (CIRCLE center_coordinate radius)
+    (CircleInputs (cons (+ (car center_coordinate) left_offset) (+ (cdr center_coordinate) bottom_offset)) radius)
+)
+
