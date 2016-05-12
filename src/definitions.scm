@@ -44,8 +44,8 @@
 ;            (x_axis_values (+ start_x left_offset)
 ;                    (+ (* end_x real_ratio) left_offset)) '()))) ; why we are passing empty list?
 
-; == LINE method ==
-(define LINE
+; == OLDLINE method ==
+(define OLDLINE
     (lambda (start_x start_y end_x end_y)
         (y_axis_values
             (+ start_x left_offset)
@@ -92,7 +92,7 @@
 
 
 
-; == LINE2 method ==
+; == LINE method ==
 
 ; FUnction for recursivliy calculating all the points
 (define calPoints
@@ -126,24 +126,48 @@
 )
 
 ;Function for handling a horizontal and vertical lines
-(define HorizontalVerticalLine
-  (lambda (start_x start_y end_x end_y)
-    (if (= start_x end_x)
-        180 ;Make a horizontal line   <-- NOT DONE
-        90  ;Make a vertical line     <-- NOT DONE
-        )
-    )
- )
+(define (HorizontalVerticalLine start_x start_y end_x end_y)
+   (if (= start_x end_x)
+       (if (< start_y end_y)
+           (MakeVerticalLine start_y end_y start_x)
+           (MakeVerticalLine end_y start_y start_x)
+       )
+       (if (< start_x end_x)
+           (MakeHorizontalLine start_x end_x start_y)
+           (MakeHorizontalLine end_x start_x start_y)
+       )
+  )
+)
+
+(define (MakeHorizontalLine small_x large_x const_y)
+  (if (<= small_x large_x)
+      (if (= small_x large_x) ;Check end condition
+          (cons (cons large_x const_y) '()) ;Return end point
+          (cons (cons small_x const_y) (MakeHorizontalLine (+ small_x 1) large_x const_y )) ;Recursive call
+      )
+  )
+)
+
+(define (MakeVerticalLine small_y large_y const_x)
+  (if (<= small_y large_y)
+      (if (= small_y large_y) ;Check end condition
+          (cons (cons const_x large_y ) '()) ;Return end point
+          (cons (cons const_x small_y ) (MakeVerticalLine (+ small_y 1) large_y const_x )) ;Recursive call
+      )
+  )
+)
 
 
-(define LINE2
+
+
+(define DetermineOctant
   (lambda (start_x start_y end_x end_y)
 
 
     ;Check the line is not horizontal or vertical
     (if (and (not (= start_x end_x)) (not(= start_y end_y)))
-        ;Desition tree for determining wich octant the line is in.
-        (if (> (- end_y start_y) 0) ;It is goint up?
+        ;Desition tree for determining witch octant the line is in.
+        (if (> (- end_y start_y) 0) ;It is going up?
             (if (> (- end_x start_x) 0) ; Is it going right?
                 (if (< (/ (- end_y start_y) (- end_x start_x)) 1) ; Is the slope below 1
                     (CorectOutput start_x start_y end_x end_y 0) ;OCT = 0 (x, y)
@@ -160,13 +184,23 @@
                     )
                 (if (< (/ (- end_y start_y) (- end_x start_x)) -1) ; Is the slope below -1
                     (CorectOutput (- 0 start_y) start_x (- 0 end_y) end_x 6) ;OCT = 6 (-y, x)
-                    (CorectOutput start_x (- 0 start_y) end_x (- 0 end_y 7)) ;OCT = 7 (x, -y)
+                    (CorectOutput start_x (- 0 start_y) end_x (- 0 end_y )7) ;OCT = 7 (x, -y)
                     )) ;end going left
             );end going up
     (HorizontalVerticalLine start_x start_y end_x end_y) ;Make a horizontal or vartical line instead
     )
- ))
+ )
+)
 
+
+
+(define (LINE start_x start_y end_x end_y)
+    (DetermineOctant (+ start_x left_offset)
+                     (+ start_y bottom_offset)
+                     (+ end_x left_offset)
+                     (+ end_y bottom_offset)
+    )
+)
 
 
 
@@ -207,6 +241,12 @@
                                                                                                     (octant_offset  + car - cdr x_0 y_0 xy_values
                                                                                                                     (octant_offset  + cdr - car x_0 y_0 xy_values (list)))))))))))
 
-(define CIRCLE
+(define CircleInputs
   (lambda (center_coordinate radius)
     (calc_octans (car center_coordinate) (cdr center_coordinate) radius (xy_values (car center_coordinate) (cdr center_coordinate) radius 0 (- radius 1)))))
+
+; Corecting the circle center with the ofsets
+(define (CIRCLE center_coordinate radius)
+    (CircleInputs (cons (+ (car center_coordinate) left_offset) (+ (cdr center_coordinate) bottom_offset)) radius)
+)
+
