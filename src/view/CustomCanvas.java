@@ -41,10 +41,18 @@ public class CustomCanvas extends Canvas {
         g2d.scale(1, -1);
     }
 
+    public void clear(){
+        g2d.clearRect(0, 0, this.getWidth(), this.getHeight());
+    }
+
     public void changeOrigin() {
         g2d.setTransform(origin);
     }
 
+    public void drawText(int xCord, int yCord, String text) {
+        g2d.drawString(text, xCord, yCord);
+    }
+    
     public void drawCartesianPlane() {
         g2d = (Graphics2D) getGraphics();
 
@@ -99,7 +107,7 @@ public class CustomCanvas extends Canvas {
                     X_AXIS_MARGIN_FROM_TOP - SECOND_LENGHT,
                     X_AXIS_MARGIN_FROM_LEFT + (i * xLength),
                     X_AXIS_MARGIN_FROM_TOP + SECOND_LENGHT);
-            g2d.drawString(Integer.toString(i),
+            g2d.drawString(Integer.toString(i * 32),
                     X_AXIS_MARGIN_FROM_LEFT + (i * xLength) - 3,
                     X_AXIS_MARGIN_FROM_TOP + AXIS_STRING_DISTANCE);
         }
@@ -110,15 +118,12 @@ public class CustomCanvas extends Canvas {
                     Y_AXIS_HEIGHT - (i * yLength),
                     Y_AXIS_X_MARGIN_FROM_LEFT + SECOND_LENGHT,
                     Y_AXIS_HEIGHT - (i * yLength));
-            g2d.drawString(Integer.toString(i),
+            g2d.drawString(Integer.toString(i * 32),
                     Y_AXIS_X_MARGIN_FROM_LEFT - AXIS_STRING_DISTANCE,
                     Y_AXIS_HEIGHT - (i * yLength));
         }
     }
 
-    public void drawText(int xCord, int yCord, String text) {
-        g2d.drawString(text, xCord, yCord);
-    }
 }
 
 

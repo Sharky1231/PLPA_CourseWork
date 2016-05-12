@@ -24,19 +24,31 @@ public class Controller {
     }
 
     public void executeAction(ActionEvent e) {
-        if (((JButton) e.getSource()).getText().startsWith("Submit") && !view.getCommandFromText().isEmpty()) {
+        if (((JButton) e.getSource()).getText().startsWith("Submit") && !view.getCommandsFromText().isEmpty()) {
             try {
-                executeSchemeCommand();
+                evaluateCommands();
             } catch (NullPointerException e1) {
-                view.setError("Not defined/wrong command: \"" + view.getCommandFromText() + "\"");
+                view.setError("Not defined/wrong command: \"" + view.getCommandsFromText() + "\"");
             } catch (Exception e2) {
                 view.setError(e2.getMessage());
             }
         }
     }
 
-    private void executeSchemeCommand() {
-        String command = view.getCommandFromText();
+    private void evaluateCommands() {
+        String command = view.getCommandsFromText();
+        String[] commands = command.split("\n");
+        view.clearCanvas();
+        view.drawCartesianPlane();
+
+        for(int i = 0; i < commands.length; i++)
+        {
+            executeCommand(commands[i]);
+        }
+    }
+
+    public void executeCommand(String command)
+    {
         Object schemeResult = model.eval(command);
 
         if(command.contains("TEXT-AT")) {
@@ -50,7 +62,6 @@ public class Controller {
         }
 
         view.setError(schemeResult.toString());
-        view.addCommandToTextArea(command);
     }
 
     private void drawText(Pair schemeResult) {

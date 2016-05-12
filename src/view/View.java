@@ -34,7 +34,7 @@ public class View extends JFrame{
 
     private void addExtraSettings() {
         textField.grabFocus();
-        codeTextArea.setEditable(false);
+        codeTextArea.setEditable(true);
         errorTextArea.setEditable(false);
 
         setSize(1000, 700);
@@ -76,7 +76,7 @@ public class View extends JFrame{
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
                                         .addComponent(submitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(textField)
+//                                        .addComponent(textField)
                                         .addGroup(jPanel2Layout.createSequentialGroup()
                                                 .addComponent(jLabel2)
                                                 .addGap(0, 0, Short.MAX_VALUE)))
@@ -86,7 +86,7 @@ public class View extends JFrame{
                 jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(textField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+//                                .addComponent(textField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(submitButton)
                                 .addGap(1, 1, 1)
@@ -149,10 +149,10 @@ public class View extends JFrame{
         pack();
     }// </editor-fold>
 
-    public void addCommandToTextArea(String command) {
-        codeTextArea.append(command + "\n");
-        textField.setText("");
-    }
+//    public void addCommandToTextArea(String command) {
+//        codeTextArea.append(command + "\n");
+//        textField.setText("");
+//    }
 
     public synchronized void drawCartesianPlane() {
         try {
@@ -193,8 +193,8 @@ public class View extends JFrame{
         }
     }
 
-    public String getCommandFromText(){
-        return textField.getText();
+    public String getCommandsFromText(){
+        return codeTextArea.getText();
     }
 
     public void registerEvents(Controller controller) {
@@ -209,5 +209,9 @@ public class View extends JFrame{
 
     public void showView() {
         setVisible(true);
+    }
+
+    public void clearCanvas(){
+        canvasArea.clear();
     }
 }
