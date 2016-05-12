@@ -34,6 +34,16 @@ public class CustomCanvas extends Canvas {
     // distance of coordinate strings from axis
     public static final int AXIS_STRING_DISTANCE = 20;
 
+    public void prepare() {
+        g2d.setColor(Color.BLACK);
+        clear();
+        drawCartesianPlane();
+    }
+
+    public void clear(){
+        g2d.clearRect(0, 0, this.getWidth(), this.getHeight());
+    }
+
     public void drawPixel(int x, int y) {
         int offsetedX = x + LEFT_OFFSET;
         int offsetedY = y + BOTTOM_OFFSET;
@@ -46,17 +56,16 @@ public class CustomCanvas extends Canvas {
                 invertedYcoord);
     }
 
-    public void prepare() {
-        clear();
-        drawCartesianPlane();
+    public void highlight(){
+        g2d.setColor(Color.RED);
     }
 
-    public void clear(){
-        g2d.clearRect(0, 0, this.getWidth(), this.getHeight());
-    }
 
-    public void drawText(int xCord, int yCord, String text) {
-        g2d.drawString(text, xCord, yCord);
+    public void drawText(int x, int y, String text) {
+        int offsetedX = x + LEFT_OFFSET;
+        int offsetedY = y + BOTTOM_OFFSET;
+        int invertedYcoord = Y_HEIGHT - offsetedY;
+        g2d.drawString(text, offsetedX, invertedYcoord);
     }
     
     public void drawCartesianPlane() {

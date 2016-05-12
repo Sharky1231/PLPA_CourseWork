@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 
-public class View extends JFrame{
+public class View extends JFrame {
 
     private CustomCanvas canvasArea;
     private javax.swing.JTextArea codeTextArea;
@@ -160,11 +160,15 @@ public class View extends JFrame{
     }
 
     public void drawPoint(Pair pair) {
-        canvasArea.drawPixel((int)pair.getFirst(), (int)pair.getRest());
+        canvasArea.drawPixel((int) pair.getFirst(), (int) pair.getRest());
     }
 
     public void prepareCanvas() {
         canvasArea.prepare();
+    }
+
+    public void highlight() {
+        canvasArea.highlight();
     }
 
     public void drawText(int xCord, int yCord, String text) {
@@ -173,6 +177,7 @@ public class View extends JFrame{
 
     private class ButtonHandler implements ActionListener {
         public Controller controller;
+
         public ButtonHandler(Controller controller) {
             this.controller = controller;
         }
@@ -184,7 +189,7 @@ public class View extends JFrame{
         }
     }
 
-    public String getCommandsFromText(){
+    public String getCommandsFromText() {
         return codeTextArea.getText();
     }
 

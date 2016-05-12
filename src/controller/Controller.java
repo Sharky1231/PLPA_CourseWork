@@ -42,6 +42,8 @@ public class Controller {
 
         for(int i = 0; i < commands.length; i++)
         {
+            if(i == commands.length - 1)
+                view.highlight();
             executeCommand(commands[i]);
         }
     }
