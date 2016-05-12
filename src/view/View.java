@@ -1,9 +1,10 @@
 package view;
 
-import java.awt.*;
+import controller.Controller;
+import jsint.Pair;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
 import javax.swing.JFrame;
 
 public class View extends JFrame{
@@ -21,10 +22,14 @@ public class View extends JFrame{
     private javax.swing.JButton submitButton;
     private javax.swing.JTextField textField;
 
+    // Canvas dimensions
+    private static final int CANVAS_WIDTH = 700;
+    private static final int CANVAS_HEIGHT = 450;
+
+
     public View() {
         init();
         addExtraSettings();
-        registerEvents();
     }
 
     private void addExtraSettings() {
@@ -33,7 +38,7 @@ public class View extends JFrame{
         errorTextArea.setEditable(false);
 
         setSize(1000, 700);
-        setResizable(true);
+        setResizable(false);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getRootPane().setDefaultButton(submitButton);
         setLocationRelativeTo(null);
@@ -98,7 +103,7 @@ public class View extends JFrame{
 
         jLabel1.setText("Errors");
 
-        jLabel3.setText("Canvas");
+        jLabel3.setText("Canvas - (Ratio 1:32) ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -109,7 +114,7 @@ public class View extends JFrame{
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                 .addComponent(jScrollPane3)
-                                                .addComponent(canvasArea, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE))
+                                                .addComponent(canvasArea, javax.swing.GroupLayout.DEFAULT_SIZE, CANVAS_WIDTH, Short.MAX_VALUE))
                                         .addComponent(jLabel1)
                                         .addComponent(jLabel3))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -122,7 +127,7 @@ public class View extends JFrame{
                                 .addContainerGap()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(canvasArea, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(canvasArea, javax.swing.GroupLayout.PREFERRED_SIZE, CANVAS_HEIGHT, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -144,20 +149,56 @@ public class View extends JFrame{
         pack();
     }// </editor-fold>
 
+    public void addCommandToTextArea(String command) {
+        codeTextArea.append(command + "\n");
+        textField.setText("");
+    }
+
+    public synchronized void drawCartesianPlane() {
+        try {
+            // Wait for components to be loaded and then draw cartesian plane
+            wait(200);
+            canvasArea.drawCartesianPlane();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void drawPoint(Pair pair) {
+        canvasArea.drawPixel((int)pair.getFirst(), (int)pair.getRest());
+    }
+
+    public void prepareCanvas() {
+        canvasArea.prepare();
+    }
+
+    public void setOriginBottomLeft() {
+        canvasArea.changeOrigin();
+    }
+
+    public void drawText(int xCord, int yCord, String text) {
+        canvasArea.drawText(xCord, yCord, text);
+    }
+
     private class ButtonHandler implements ActionListener {
+        public Controller controller;
+        public ButtonHandler(Controller controller) {
+            this.controller = controller;
+        }
+
         public void actionPerformed(ActionEvent event) {
             if (event.getSource() == submitButton) {
-                if (!textField.getText().isEmpty()) {
-                    codeTextArea.append(textField.getText() + "\n");
-                    textField.setText("");
-                    canvasArea.drawTest();
-                }
+                controller.executeAction(event);
             }
         }
     }
 
-    private void registerEvents() {
-        ActionListener listener = new ButtonHandler();
+    public String getCommandFromText(){
+        return textField.getText();
+    }
+
+    public void registerEvents(Controller controller) {
+        ActionListener listener = new ButtonHandler(controller);
         submitButton.addActionListener(listener);
     }
 
