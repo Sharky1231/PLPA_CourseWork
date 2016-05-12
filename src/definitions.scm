@@ -196,8 +196,8 @@
   (lambda (x0 y0 x y decision_over_2)
     (if(>= x y)
        (if(<= decision_over_2 0)
-          (cons (cons x y) (xy_values x0 y0 x (+ y 1) (+ (* y 2) 1)))
-          (cons (cons x y) (xy_values x0 y0 (- x 1) (+ y 1) (+ (* (- y (- x 1)) 2) 1))))
+          (cons (cons x y) (xy_values x0 y0 x (+ y 1) (+ decision_over_2 (+ (* y 2) 1))))
+          (cons (cons x y) (xy_values x0 y0 (- x 1) (+ y 1) (+ decision_over_2 (+ (* (- y (- x 1)) 2) 1)))))
        '())))
 
 ;; Calculates all coordinates for an octant by matching x_0 and y_0 with an operator and the calculated circle slope coordinates

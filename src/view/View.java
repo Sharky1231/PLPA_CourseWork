@@ -149,11 +149,6 @@ public class View extends JFrame{
         pack();
     }// </editor-fold>
 
-//    public void addCommandToTextArea(String command) {
-//        codeTextArea.append(command + "\n");
-//        textField.setText("");
-//    }
-
     public synchronized void drawCartesianPlane() {
         try {
             // Wait for components to be loaded and then draw cartesian plane
@@ -202,12 +197,8 @@ public class View extends JFrame{
         errorTextArea.append(error + "\n");
     }
 
-
     public void showView() {
         setVisible(true);
     }
 
-    public void clearCanvas(){
-        canvasArea.clear();
-    }
 }
