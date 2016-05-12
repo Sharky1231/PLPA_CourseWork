@@ -38,8 +38,7 @@ public class Controller {
     private void evaluateCommands() {
         String command = view.getCommandsFromText();
         String[] commands = command.split("\n");
-        view.clearCanvas();
-        view.drawCartesianPlane();
+        view.prepareCanvas();
 
         for(int i = 0; i < commands.length; i++)
         {
@@ -56,9 +55,7 @@ public class Controller {
         }
 
         else {
-            view.prepareCanvas();
             drawResultsFromScheme((Pair) schemeResult);
-            view.setOriginBottomLeft();
         }
 
         view.setError(schemeResult.toString());

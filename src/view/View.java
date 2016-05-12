@@ -172,10 +172,6 @@ public class View extends JFrame{
         canvasArea.prepare();
     }
 
-    public void setOriginBottomLeft() {
-        canvasArea.changeOrigin();
-    }
-
     public void drawText(int xCord, int yCord, String text) {
         canvasArea.drawText(xCord, yCord, text);
     }

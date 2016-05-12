@@ -8,6 +8,10 @@ public class CustomCanvas extends Canvas {
     AffineTransform origin;
     Graphics2D g2d;
 
+    public static final int BOTTOM_OFFSET = 29;
+    public static final int LEFT_OFFSET = 20;
+    public static final int Y_HEIGHT = 450;
+
     // x-axis coord constants
     public static final int X_AXIS_MARGIN_FROM_LEFT = 20;
     public static final int X_AXIS_MARGIN_FROM_TOP = 420;
@@ -31,22 +35,24 @@ public class CustomCanvas extends Canvas {
     public static final int AXIS_STRING_DISTANCE = 20;
 
     public void drawPixel(int x, int y) {
-        g2d.drawLine(x, y, x, y);
+        int offsetedX = x + LEFT_OFFSET;
+        int offsetedY = y + BOTTOM_OFFSET;
+        int invertedYcoord = Y_HEIGHT - offsetedY;
+
+        g2d.drawLine(
+                offsetedX,
+                invertedYcoord,
+                offsetedX,
+                invertedYcoord);
     }
 
     public void prepare() {
-        g2d = (Graphics2D) getGraphics();
-        origin = g2d.getTransform();
-        g2d.translate(0, getHeight() - 1);
-        g2d.scale(1, -1);
+        clear();
+        drawCartesianPlane();
     }
 
     public void clear(){
         g2d.clearRect(0, 0, this.getWidth(), this.getHeight());
-    }
-
-    public void changeOrigin() {
-        g2d.setTransform(origin);
     }
 
     public void drawText(int xCord, int yCord, String text) {

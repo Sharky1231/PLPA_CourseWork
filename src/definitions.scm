@@ -1,8 +1,4 @@
 ; == Variables ==
-(define left_offset 20)
-
-(define bottom_offset 29)
-
 (define real_ratio 32)
 
 
@@ -34,27 +30,17 @@
             (cons (cons (car x_values) (y_value start_x start_y end_x end_y (car x_values)))
                   (y_axis_values start_x start_y end_x end_y (cdr x_values) pair)))))
 
-;(define LINE
-;    (lambda (start_x start_y end_x end_y)
-;        (y_axis_values
-;            (+ start_x left_offset)
-;            (+ (* start_y real_ratio) bottom_offset)
-;            (+ (* end_x real_ratio) left_offset)
-;            (+ bottom_offset (* end_y real_ratio))
-;            (x_axis_values (+ start_x left_offset)
-;                    (+ (* end_x real_ratio) left_offset)) '()))) ; why we are passing empty list?
-
 ; == OLDLINE method ==
 (define OLDLINE
     (lambda (start_x start_y end_x end_y)
         (y_axis_values
-            (+ start_x left_offset)
-            (+ start_y bottom_offset)
-            (+ end_x left_offset)
-            (+ end_y bottom_offset)
+            start_x
+            start_y
+            end_x
+            end_y
             (x_axis_values
-                (+ start_x left_offset)
-                (+ end_x left_offset)) '())))
+                start_x
+                end_x) '())))
 
 (define v_line
     (lambda (start_x start_y end_y)
@@ -66,9 +52,9 @@
 (define VERTICAL_LINE
     (lambda (start_x start_y end_x end_y)
         (v_line
-            (+ start_x left_offset)
-            (+ start_y bottom_offset)
-            (+ end_y bottom_offset))))
+            start_x
+            start_y
+            end_y)))
 
 ; == RECTANGLE method ==
 (define RECTANGLE
@@ -195,12 +181,11 @@
 
 
 (define (LINE start_x start_y end_x end_y)
-    (DetermineOctant (+ start_x left_offset)
-                     (+ start_y bottom_offset)
-                     (+ end_x left_offset)
-                     (+ end_y bottom_offset)
+    (DetermineOctant start_x
+                     start_y
+                     end_x
+                     end_y)
     )
-)
 
 
 
@@ -247,6 +232,6 @@
 
 ; Corecting the circle center with the ofsets
 (define (CIRCLE center_coordinate radius)
-    (CircleInputs (cons (+ (car center_coordinate) left_offset) (+ (cdr center_coordinate) bottom_offset)) radius)
+    (CircleInputs (cons (car center_coordinate) (cdr center_coordinate)) radius)
 )
 
