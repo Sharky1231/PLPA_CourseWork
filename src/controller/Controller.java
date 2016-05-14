@@ -5,6 +5,7 @@ import model.Model;
 import view.View;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class Controller {
@@ -43,22 +44,29 @@ public class Controller {
         for(int i = 0; i < commands.length; i++)
         {
             if(i == commands.length - 1)
-                view.highlight();
+                view.highlight("red");
             executeCommand(commands[i]);
         }
     }
 
     public void executeCommand(String command)
     {
-        Object schemeResult = model.eval(command);
+        Pair schemeResult = (Pair) model.eval(command);
 
         if(command.contains("TEXT-AT")) {
-            drawText((Pair)schemeResult);
+            drawText(schemeResult);
         }
 
-        else {
-            drawResultsFromScheme((Pair) schemeResult);
+        else if(command.contains("DRAW")){
+            String color = (String) schemeResult.getFirst();
+            view.highlight(color);
+            drawResultsFromScheme((Pair) schemeResult.getRest());
         }
+
+        else{
+            drawResultsFromScheme(schemeResult);
+        }
+
 
         view.setError(schemeResult.toString());
     }

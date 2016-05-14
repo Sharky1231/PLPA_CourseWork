@@ -12,6 +12,13 @@
               (cons (car lst1)
                     (join_lists (cdr lst1) lst2)))))
 
+(define join_multiple_lists
+    (lambda (list)
+        (if(null? list)
+           '()
+           (join_lists (car list) (join_multiple_lists (cdr list)))
+            )))
+
 ; == LINE method ==
 (define y_value
     (lambda (start_x start_y end_x end_y x)
@@ -72,6 +79,7 @@
                 (join_lists vertical_lines horizontal_lines))
             )))
 
+; == TEXT-AT method ==
 (define TEXT-AT
     (lambda (x y text)
         (cons (cons x y) text)))
@@ -115,30 +123,21 @@
 (define (HorizontalVerticalLine start_x start_y end_x end_y)
    (if (= start_x end_x)
        (if (< start_y end_y)
-           (MakeVerticalLine start_y end_y start_x)
-           (MakeVerticalLine end_y start_y start_x)
+           (MakeLine start_y end_y start_x)
+           (MakeLine end_y start_y start_x)
        )
        (if (< start_x end_x)
-           (MakeHorizontalLine start_x end_x start_y)
-           (MakeHorizontalLine end_x start_x start_y)
+           (MakeLine start_x end_x start_y)
+           (MakeLine end_x start_x start_y)
        )
   )
 )
 
-(define (MakeHorizontalLine small_x large_x const_y)
-  (if (<= small_x large_x)
-      (if (= small_x large_x) ;Check end condition
-          (cons (cons large_x const_y) '()) ;Return end point
-          (cons (cons small_x const_y) (MakeHorizontalLine (+ small_x 1) large_x const_y )) ;Recursive call
-      )
-  )
-)
-
-(define (MakeVerticalLine small_y large_y const_x)
-  (if (<= small_y large_y)
-      (if (= small_y large_y) ;Check end condition
-          (cons (cons const_x large_y ) '()) ;Return end point
-          (cons (cons const_x small_y ) (MakeVerticalLine (+ small_y 1) large_y const_x )) ;Recursive call
+(define (MakeLine small_coord large_coord constant_coord)
+  (if (<= small_coord large_coord)
+      (if (= small_coord large_coord) ;Check end condition
+          (cons (cons large_coord constant_coord) '()) ;Return end point
+          (cons (cons small_coord constant_coord) (MakeLine (+ small_coord 1) large_coord constant_coord )) ;Recursive call
       )
   )
 )
@@ -234,4 +233,9 @@
 (define (CIRCLE center_coordinate radius)
     (CircleInputs (cons (car center_coordinate) (cdr center_coordinate)) radius)
 )
+
+(define DRAW
+    (lambda (color drawings)
+        (cons color (join_multiple_lists drawings))
+        ))
 

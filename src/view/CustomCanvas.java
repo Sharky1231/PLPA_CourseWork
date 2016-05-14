@@ -56,8 +56,9 @@ public class CustomCanvas extends Canvas {
                 invertedYcoord);
     }
 
-    public void highlight(){
-        g2d.setColor(Color.RED);
+    public void highlight(String color){
+        Color decodedColor = colorOf(color);
+        g2d.setColor(decodedColor);
     }
 
 
@@ -66,6 +67,15 @@ public class CustomCanvas extends Canvas {
         int offsetedY = y + BOTTOM_OFFSET;
         int invertedYcoord = Y_HEIGHT - offsetedY;
         g2d.drawString(text, offsetedX, invertedYcoord);
+    }
+
+    public static Color colorOf(String color) {
+        try {
+            String lowerCaseColorName = color.toLowerCase();
+            return (Color) Color.class.getDeclaredField(lowerCaseColorName).get(null);
+        } catch(Exception notAvailable) {
+            return Color.BLACK;
+        }
     }
     
     public void drawCartesianPlane() {

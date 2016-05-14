@@ -3,6 +3,7 @@ package view;
 import controller.Controller;
 import jsint.Pair;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
@@ -167,13 +168,14 @@ public class View extends JFrame {
         canvasArea.prepare();
     }
 
-    public void highlight() {
-        canvasArea.highlight();
+    public void highlight(String color) {
+        canvasArea.highlight(color);
     }
 
     public void drawText(int xCord, int yCord, String text) {
         canvasArea.drawText(xCord, yCord, text);
     }
+
 
     private class ButtonHandler implements ActionListener {
         public Controller controller;
