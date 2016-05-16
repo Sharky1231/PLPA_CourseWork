@@ -235,7 +235,11 @@
     (CircleInputs (cons (car center_coordinate) (cdr center_coordinate)) radius)
 )
 
-; FILL FIGURE
+(define DRAW
+    (lambda (color drawings)
+        (cons color (join_multiple_lists drawings))
+        ))
+
 
 
 
