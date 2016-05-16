@@ -235,3 +235,48 @@
     (CircleInputs (cons (car center_coordinate) (cdr center_coordinate)) radius)
 )
 
+; FILL FIGURE
+
+
+
+(define (FILL FigurAsListOfPoints)
+  (FindPixelsWithInFigur (FindCenterOfMassPoint FigurAsListOfPoints) FigurAsListOfPoints)
+ )
+
+(define (FindPixelsWithInFigur PointIndsideFigurGuess ListOfBoundPoints)
+  (if (DosListContainPoint  ListOfBoundPoints PointIndsideFigurGuess)
+      '()
+      (cons PointIndsideFigurGuess (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 1 0)) ListOfBoundPoints))
+      )
+ )
+
+
+(define (DosListContainPoint List Point)
+  (if (null? List)                               ;End condition
+      #f                                         ;If list is empty return false
+      (if (equal? (car List) Point)              ;Is point and first list element the same?
+          #t
+          (DosListContainPoint (cdr List) Point) ;Call self with rest of list
+          )
+      )
+)
+
+(define (FindCenterOfMassPoint List)
+  (CalSumOfPoints List (cons 0 0) 0)
+)
+
+; Sumpoint (cons 0 0); Counter 0; (Can we make defauld values?)
+(define (CalSumOfPoints ListOfPoints SumPoint Counter)
+  (if (null? ListOfPoints)
+      (DevidePoint SumPoint Counter)
+      ( CalSumOfPoints (cdr ListOfPoints) (AddPoints (car ListOfPoints) SumPoint) (+ Counter 1) )
+  )
+)
+
+(define (AddPoints Point_1 Point_2)
+  (cons (+ (car Point_1) (car Point_2)) (+ (cdr Point_1) (cdr Point_2)))
+ )
+
+(define (DevidePoint Point Devisor)
+  (cons (floor (/ (car Point) Devisor)) (floor (/ (cdr Point) Devisor)))
+)
