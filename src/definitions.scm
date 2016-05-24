@@ -243,16 +243,31 @@
 
 
 
+;------ FILL FILL -------
+
+
 (define (FILL FigurAsListOfPoints)
   (FindPixelsWithInFigur (FindCenterOfMassPoint FigurAsListOfPoints) FigurAsListOfPoints)
  )
 
+
+
 (define (FindPixelsWithInFigur PointIndsideFigurGuess ListOfBoundPoints)
-  (if (DosListContainPoint  ListOfBoundPoints PointIndsideFigurGuess)
-      '()
-      (cons PointIndsideFigurGuess (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 1 0)) ListOfBoundPoints))
-      )
+  (if (< (depthCounter) 200)
+      (if (DosListContainPoint  ListOfBoundPoints PointIndsideFigurGuess)
+          '()     ;The guess was a point on the enclosing figur. Stop condition
+          (append ;The guess was a fill point. Append this point with others...
+           (cons PointIndsideFigurGuess (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 1 0)) (cons PointIndsideFigurGuess ListOfBoundPoints))) ;Right
+                                        (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 0 1)) (cons PointIndsideFigurGuess ListOfBoundPoints))  ;Up
+                                        (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons -1 0)) (cons PointIndsideFigurGuess ListOfBoundPoints)) ;Left
+                                        (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 0 -1)) (cons PointIndsideFigurGuess ListOfBoundPoints)) ;Down
+          )
+       )
+      '() ;(list (depthCounter)) ;If we reached the max depth add the counter to the list
+   )
  )
+
+
 
 
 (define (DosListContainPoint List Point)
@@ -277,10 +292,17 @@
   )
 )
 
+; Will add two points
 (define (AddPoints Point_1 Point_2)
   (cons (+ (car Point_1) (car Point_2)) (+ (cdr Point_1) (cdr Point_2)))
  )
 
+;Will devide two points
 (define (DevidePoint Point Devisor)
   (cons (floor (/ (car Point) Devisor)) (floor (/ (cdr Point) Devisor)))
 )
+
+;Will add one to counter and return it
+(define depthCounter
+  (let ((num 0))
+    (lambda () (set! num (+ num 1)) num)))
