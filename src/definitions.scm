@@ -237,26 +237,38 @@
 ;------ FILL FILL -------
 
 
+; FILL FILL
 (define (FILL FigurAsListOfPoints)
   (FindPixelsWithInFigur (FindCenterOfMassPoint FigurAsListOfPoints) FigurAsListOfPoints)
+  (saveList '()) ;Return the saved list
  )
+
 
 
 
 (define (FindPixelsWithInFigur PointIndsideFigurGuess ListOfBoundPoints)
-  (if (< (depthCounter) 200)
+  (if (< (depthCounter) 500)
       (if (DosListContainPoint  ListOfBoundPoints PointIndsideFigurGuess)
           '()     ;The guess was a point on the enclosing figur. Stop condition
-          (append ;The guess was a fill point. Append this point with others...
-           (cons PointIndsideFigurGuess (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 1 0)) (cons PointIndsideFigurGuess ListOfBoundPoints))) ;Right
-                                        (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 0 1)) (cons PointIndsideFigurGuess ListOfBoundPoints))  ;Up
-                                        (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons -1 0)) (cons PointIndsideFigurGuess ListOfBoundPoints)) ;Left
-                                        (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 0 -1)) (cons PointIndsideFigurGuess ListOfBoundPoints)) ;Down
+          (if (DosListContainPoint  (saveList '()) PointIndsideFigurGuess)
+              '()
+
+              (append '()
+
+
+                  (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 1 0)) (cons (saveList (list PointIndsideFigurGuess)) ListOfBoundPoints)) ;Right
+                  (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 0 1)) (cons (saveList (list PointIndsideFigurGuess)) ListOfBoundPoints))  ;Up
+                  (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons -1 0)) (cons (saveList (list PointIndsideFigurGuess)) ListOfBoundPoints)) ;Left
+                  (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 0 -1)) (cons (saveList (list PointIndsideFigurGuess)) ListOfBoundPoints)) ;Down
+              )
+
+
+
           )
-       )
+      )
       '() ;(list (depthCounter)) ;If we reached the max depth add the counter to the list
-   )
- )
+  )
+)
 
 
 
@@ -297,3 +309,8 @@
 (define depthCounter
   (let ((num 0))
     (lambda () (set! num (+ num 1)) num)))
+
+;Will save list
+(define saveList
+  (let ((localList '()))
+    (lambda (newList) (set! localList (append localList newList)) localList)))
