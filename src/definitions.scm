@@ -237,7 +237,7 @@
 ;------ FILL FILL -------
 
 
-; FILL FILL
+; FILL FILL Not testet
 (define (FILL FigurAsListOfPoints)
   (FindPixelsWithInFigur (FindCenterOfMassPoint FigurAsListOfPoints) FigurAsListOfPoints)
   (saveList '()) ;Return the saved list
