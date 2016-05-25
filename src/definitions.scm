@@ -256,10 +256,11 @@
               (append '()
 
 
-                  (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 1 0)) (cons (saveList (list PointIndsideFigurGuess)) ListOfBoundPoints)) ;Right
-                  (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 0 1)) (cons (saveList (list PointIndsideFigurGuess)) ListOfBoundPoints))  ;Up
-                  (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons -1 0)) (cons (saveList (list PointIndsideFigurGuess)) ListOfBoundPoints)) ;Left
-                  (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 0 -1)) (cons (saveList (list PointIndsideFigurGuess)) ListOfBoundPoints)) ;Down
+                  (saveList (list PointIndsideFigurGuess))
+                                    (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 1 0)) (cons (list PointIndsideFigurGuess) ListOfBoundPoints)) ;Right
+                                    (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 0 1)) (cons (list PointIndsideFigurGuess) ListOfBoundPoints))  ;Up
+                                    (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons -1 0)) (cons (list PointIndsideFigurGuess) ListOfBoundPoints)) ;Left
+                                    (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 0 -1)) (cons (list PointIndsideFigurGuess) ListOfBoundPoints)) ;Down
               )
 
 
