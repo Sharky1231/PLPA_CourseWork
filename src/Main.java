@@ -11,8 +11,16 @@ public class Main {
         Model model = new Model();
         Controller controller = new Controller(view, model);
 
-        model.loadDefinitionsFromFilePath("src//definitions.scm");
+        try {
+            loadSchemeFiles(model);
+            controller.start();
+        } catch (Exception e) {
+            view.setError(e.getMessage());
+        }
+    }
 
-        controller.start();
+    private static void loadSchemeFiles(Model model) throws FileNotFoundException {
+        model.loadDefinitionsFromFilePath("src//definitions.scm");
+        model.loadDefinitionsFromFilePath("src//tests.scm");
     }
 }

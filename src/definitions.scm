@@ -37,17 +37,6 @@
             (cons (cons (car x_values) (y_value start_x start_y end_x end_y (car x_values)))
                   (y_axis_values start_x start_y end_x end_y (cdr x_values) pair)))))
 
-; == OLDLINE method ==
-(define OLDLINE
-    (lambda (start_x start_y end_x end_y)
-        (y_axis_values
-            start_x
-            start_y
-            end_x
-            end_y
-            (x_axis_values
-                start_x
-                end_x) '())))
 
 (define v_line
     (lambda (start_x start_y end_y)
@@ -62,6 +51,8 @@
             start_x
             start_y
             end_y)))
+
+; LINE CANT DRAW VERTICAL LINE. MAKE IT SO
 
 ; == RECTANGLE method ==
 (define RECTANGLE
