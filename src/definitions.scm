@@ -237,17 +237,16 @@
 ;------ FILL FILL -------
 
 
-; FILL FILL Not testet
+; FILL FILL
 (define (FILL FigurAsListOfPoints)
-  (FindPixelsWithInFigur (FindCenterOfMassPoint FigurAsListOfPoints) FigurAsListOfPoints)
-  (saveList '()) ;Return the saved list
+   (FindPixelsWithInFigur (FindCenterOfMassPoint FigurAsListOfPoints) FigurAsListOfPoints '())
  )
 
 
 
 
-(define (FindPixelsWithInFigur PointIndsideFigurGuess ListOfBoundPoints)
-  (if (< (depthCounter) 500)
+(define (FindPixelsWithInFigur2 PointIndsideFigurGuess ListOfBoundPoints)
+
       (if (DosListContainPoint  ListOfBoundPoints PointIndsideFigurGuess)
           '()     ;The guess was a point on the enclosing figur. Stop condition
           (if (DosListContainPoint  (saveList '()) PointIndsideFigurGuess)
@@ -255,20 +254,17 @@
 
               (append '()
 
-
                   (saveList (list PointIndsideFigurGuess))
-                                    (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 1 0)) (cons (list PointIndsideFigurGuess) ListOfBoundPoints)) ;Right
-                                    (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 0 1)) (cons (list PointIndsideFigurGuess) ListOfBoundPoints))  ;Up
-                                    (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons -1 0)) (cons (list PointIndsideFigurGuess) ListOfBoundPoints)) ;Left
-                                    (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 0 -1)) (cons (list PointIndsideFigurGuess) ListOfBoundPoints)) ;Down
+                  (FindPixelsWithInFigur2 (AddPoints PointIndsideFigurGuess (cons 1 0)) (cons (list PointIndsideFigurGuess) ListOfBoundPoints)) ;Right
+                  (FindPixelsWithInFigur2 (AddPoints PointIndsideFigurGuess (cons 0 1)) (cons (list PointIndsideFigurGuess) ListOfBoundPoints))  ;Up
+                  (FindPixelsWithInFigur2 (AddPoints PointIndsideFigurGuess (cons -1 0)) (cons (list PointIndsideFigurGuess) ListOfBoundPoints)) ;Left
+                  (FindPixelsWithInFigur2 (AddPoints PointIndsideFigurGuess (cons 0 -1)) (cons (list PointIndsideFigurGuess) ListOfBoundPoints)) ;Down
               )
 
 
 
           )
       )
-      '() ;(list (depthCounter)) ;If we reached the max depth add the counter to the list
-  )
 )
 
 
@@ -305,13 +301,3 @@
 (define (DevidePoint Point Devisor)
   (cons (floor (/ (car Point) Devisor)) (floor (/ (cdr Point) Devisor)))
 )
-
-;Will add one to counter and return it
-(define depthCounter
-  (let ((num 0))
-    (lambda () (set! num (+ num 1)) num)))
-
-;Will save list
-(define saveList
-  (let ((localList '()))
-    (lambda (newList) (set! localList (append localList newList)) localList)))
