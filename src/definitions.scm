@@ -243,26 +243,24 @@
  )
 
 
-
-
-(define (FindPixelsWithInFigur2 PointIndsideFigurGuess ListOfBoundPoints)
-
+(define (FindPixelsWithInFigur PointIndsideFigurGuess ListOfBoundPoints Fill)
       (if (DosListContainPoint  ListOfBoundPoints PointIndsideFigurGuess)
-          '()     ;The guess was a point on the enclosing figur. Stop condition
-          (if (DosListContainPoint  (saveList '()) PointIndsideFigurGuess)
-              '()
+          Fill
+          (if (DosListContainPoint  Fill PointIndsideFigurGuess)
+              Fill
 
-              (append '()
+              (append
 
-                  (saveList (list PointIndsideFigurGuess))
-                  (FindPixelsWithInFigur2 (AddPoints PointIndsideFigurGuess (cons 1 0)) (cons (list PointIndsideFigurGuess) ListOfBoundPoints)) ;Right
-                  (FindPixelsWithInFigur2 (AddPoints PointIndsideFigurGuess (cons 0 1)) (cons (list PointIndsideFigurGuess) ListOfBoundPoints))  ;Up
-                  (FindPixelsWithInFigur2 (AddPoints PointIndsideFigurGuess (cons -1 0)) (cons (list PointIndsideFigurGuess) ListOfBoundPoints)) ;Left
-                  (FindPixelsWithInFigur2 (AddPoints PointIndsideFigurGuess (cons 0 -1)) (cons (list PointIndsideFigurGuess) ListOfBoundPoints)) ;Down
+
+                  (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 1 0))  ListOfBoundPoints
+                                          (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 0 1))  ListOfBoundPoints
+                                                                  (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons -1 0)) ListOfBoundPoints
+                                                                                           (FindPixelsWithInFigur (AddPoints PointIndsideFigurGuess (cons 0 -1)) ListOfBoundPoints (append Fill (list PointIndsideFigurGuess)))
+                                                                                           )
+                                                                  )
+                                          )
+
               )
-
-
-
           )
       )
 )
